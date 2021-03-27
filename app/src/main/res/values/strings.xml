@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Drozer_content_provider</string>
+    <string name="message">The database has been created, but it doesn\'t seem to be output to the application screen ...</string>
+</resources>
