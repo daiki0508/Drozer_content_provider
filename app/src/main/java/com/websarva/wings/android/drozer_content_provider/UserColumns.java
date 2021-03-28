@@ -19,6 +19,8 @@ public class UserColumns implements BaseColumns {
     public static final String NAME = "name";
     // カラム メールアドレス
     public static final String EMAIL = "email";
+    // カラム パスワード
+    public static final String PASSWORD = "password";
 
     // コンストラクタ
     private UserColumns(){}

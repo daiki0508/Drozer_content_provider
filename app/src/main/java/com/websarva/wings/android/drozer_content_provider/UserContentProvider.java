@@ -32,6 +32,7 @@ public class UserContentProvider extends android.content.ContentProvider {
         personProjectionMap.put(UserColumns._ID, UserColumns._ID);
         personProjectionMap.put(UserColumns.NAME, UserColumns.NAME);
         personProjectionMap.put(UserColumns.EMAIL, UserColumns.EMAIL);
+        personProjectionMap.put(UserColumns.PASSWORD, UserColumns.PASSWORD);
     }
 
     // DBHelperのインスタンス

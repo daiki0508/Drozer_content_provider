@@ -18,11 +18,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase){
         // データベースのテーブルを作成する
         sqLiteDatabase.execSQL("CREATE TABLE " + DB_NAME + " (" + UserColumns._ID + " INTEGER PRIMARY KEY,"
-                + UserColumns.NAME + " TEXT," + UserColumns.EMAIL + " TEXT" + ");");
+                + UserColumns.NAME + " TEXT," + UserColumns.EMAIL + " TEXT," + UserColumns.PASSWORD + " TEXT" + ");");
 
         // テーブルにデータを挿入する
         sqLiteDatabase.execSQL("insert into " + DB_NAME + "(" + UserColumns.NAME + ","
-                + UserColumns.EMAIL + ") values ('山田 太郎', 'hogehoge@gmail.com');");
+                + UserColumns.EMAIL + "," + UserColumns.PASSWORD + ") values ('山田 太郎', 'hogehoge@gmail.com', 'U2VjcmV0UGFzc3dvcmQ=');");
+        sqLiteDatabase.execSQL("insert into " + DB_NAME + "(" + UserColumns.NAME + ","
+                + UserColumns.EMAIL + "," + UserColumns.PASSWORD + ") values ('情報 花子', 'jouhou@yahoo.co.jp', 'Sm91aG91X0hhbmFrbzEyMzQ=');");
     }
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion){
