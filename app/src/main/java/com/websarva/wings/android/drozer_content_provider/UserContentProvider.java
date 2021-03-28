@@ -20,6 +20,11 @@ public class UserContentProvider extends android.content.ContentProvider {
     // USERS テーブル 個別 URI ID
     private static final int USERS_ID = 2;
 
+    // ADMIN テーブル URI ID
+    private static final int ADMIN = 100;
+    // ADMIN テーブル 個別 URI ID
+    private static final int ADMIN_ID = 101;
+
     // 利用者がメソッドを呼び出したURIに対応する処理を判定処理に仕様します
     private static HashMap<String, String> personProjectionMap;
     private static final UriMatcher sUriMatcher;
@@ -27,6 +32,8 @@ public class UserContentProvider extends android.content.ContentProvider {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sUriMatcher.addURI(AUTHORITY, UserColumns.PATH, USERS);
         sUriMatcher.addURI(AUTHORITY, UserColumns.PATH + "/#",USERS_ID);
+        sUriMatcher.addURI(AUTHORITY,UserColumns.PATH_ADMIN, ADMIN);
+        sUriMatcher.addURI(AUTHORITY,UserColumns.PATH_ADMIN + "/#", ADMIN_ID);
 
         personProjectionMap = new HashMap<String, String>();
         personProjectionMap.put(UserColumns._ID, UserColumns._ID);
@@ -52,9 +59,15 @@ public class UserContentProvider extends android.content.ContentProvider {
         queryBuilder.setTables(UserDBHelper.DB_NAME);
         switch (sUriMatcher.match(uri)){
             case USERS:
+                queryBuilder.setTables(UserDBHelper.DB_NAME);
+                queryBuilder.setProjectionMap(personProjectionMap);
+                break;
+            case ADMIN:
+                queryBuilder.setTables(UserDBHelper.DB_NAME_ADMIN);
                 queryBuilder.setProjectionMap(personProjectionMap);
                 break;
             case USERS_ID:
+            case ADMIN_ID:
                 queryBuilder.setProjectionMap(personProjectionMap);
                 queryBuilder.appendWhere(UserColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
@@ -78,6 +91,10 @@ public class UserContentProvider extends android.content.ContentProvider {
                 insertTable = UserColumns.TABLE;
                 contentUri = UserColumns.CONTENT_URI;
                 break;
+            case ADMIN:
+                insertTable = UserColumns.TABLE_ADMIN;
+                contentUri = UserColumns.CONTENT_URI_ADMIN;
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -98,13 +115,22 @@ public class UserContentProvider extends android.content.ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs){
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         int count;
+        String id;
         switch (sUriMatcher.match(uri)){
             case USERS:
                 count = db.update(UserDBHelper.DB_NAME, values, selection, selectionArgs);
                 break;
+            case ADMIN:
+                count = db.update(UserDBHelper.DB_NAME_ADMIN, values, selection, selectionArgs);
+                break;
             case USERS_ID:
-                String id = uri.getPathSegments().get(1);
+                id = uri.getPathSegments().get(1);
                 count = db.update(UserDBHelper.DB_NAME, values, UserColumns._ID + "="
+                        + id + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""),selectionArgs);
+                break;
+            case ADMIN_ID:
+                id = uri.getPathSegments().get(1);
+                count = db.update(UserDBHelper.DB_NAME_ADMIN, values, UserColumns._ID + "="
                         + id + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""),selectionArgs);
                 break;
             default:
@@ -119,13 +145,22 @@ public class UserContentProvider extends android.content.ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs){
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         int count;
+        String id;
         switch (sUriMatcher.match(uri)){
             case USERS:
                 count = db.delete(UserDBHelper.DB_NAME, selection, selectionArgs);
                 break;
+            case ADMIN:
+                count = db.delete(UserDBHelper.DB_NAME_ADMIN, selection, selectionArgs);
+                break;
             case USERS_ID:
-                String id = uri.getPathSegments().get(1);
+                id = uri.getPathSegments().get(1);
                 count = db.delete(UserColumns.TABLE, UserColumns._ID + "=" + id
+                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""),selectionArgs);
+                break;
+            case ADMIN_ID:
+                id = uri.getPathSegments().get(1);
+                count = db.delete(UserColumns.TABLE_ADMIN, UserColumns._ID + "=" + id
                         + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""),selectionArgs);
                 break;
             default:
@@ -143,6 +178,10 @@ public class UserContentProvider extends android.content.ContentProvider {
                 return UserColumns.CONTENT_TYPE;
             case USERS_ID:
                 return UserColumns.CONTENT_ITEM_TYPE;
+            case ADMIN:
+                return UserColumns.CONTENT_TYPE_ADMIN;
+            case ADMIN_ID:
+                return UserColumns.CONTENT_ITEM_TYPE_ADMIN;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }

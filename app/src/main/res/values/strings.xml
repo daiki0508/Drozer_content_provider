@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Drozer_content_provider</string>
+    <string name="user">User</string>
+    <string name="user_top_message">Only registered user names can be confirmed.Please log in as an administrator to see all the information.</string>
+    <string name="supplement">Since the login function is not implemented this time, it is only necessary to be able to confirm the email address and password.</string>
 </resources>

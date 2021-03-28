@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class UserDBHelper extends SQLiteOpenHelper {
     // DB名とバージョン
     final static String DB_NAME = "database";
+    final static String DB_NAME_ADMIN = "database_admin";
     private static final int DB_VERSION = 1;
 
     // コンストラクタ
@@ -20,11 +21,17 @@ public class UserDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + DB_NAME + " (" + UserColumns._ID + " INTEGER PRIMARY KEY,"
                 + UserColumns.NAME + " TEXT," + UserColumns.EMAIL + " TEXT," + UserColumns.PASSWORD + " TEXT" + ");");
 
+        sqLiteDatabase.execSQL("CREATE TABLE " + DB_NAME_ADMIN + " (" + UserColumns._ID + " INTEGER PRIMARY KEY,"
+                + UserColumns.NAME + " TEXT," + UserColumns.EMAIL + " TEXT," + UserColumns.PASSWORD + " TEXT" + ");");
+
         // テーブルにデータを挿入する
         sqLiteDatabase.execSQL("insert into " + DB_NAME + "(" + UserColumns.NAME + ","
                 + UserColumns.EMAIL + "," + UserColumns.PASSWORD + ") values ('山田 太郎', 'hogehoge@gmail.com', 'U2VjcmV0UGFzc3dvcmQ=');");
         sqLiteDatabase.execSQL("insert into " + DB_NAME + "(" + UserColumns.NAME + ","
                 + UserColumns.EMAIL + "," + UserColumns.PASSWORD + ") values ('情報 花子', 'jouhou@yahoo.co.jp', 'Sm91aG91X0hhbmFrbzEyMzQ=');");
+
+        sqLiteDatabase.execSQL("insert into " + DB_NAME_ADMIN + "(" + UserColumns.NAME + ","
+                + UserColumns.EMAIL + "," + UserColumns.PASSWORD + ") values ('admin', 'admin@outlook.jp', 'YWRtaW5fU2VjcmV0UGFzc3dvcmQ=');");
     }
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion){
