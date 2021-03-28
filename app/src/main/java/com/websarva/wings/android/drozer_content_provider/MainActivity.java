@@ -46,22 +46,23 @@ public class MainActivity extends Activity {
         if (cur.moveToFirst()){
             String email;
             String name;
-            String password_encode;
+        //    String password_encode;
             int emailColumn = cur.getColumnIndex(UserColumns.EMAIL);
             int nameColumn = cur.getColumnIndex(UserColumns.NAME);
-         //   int passwordColumn = cur.getColumnIndex(UserColumns.PASSWORD);
+        //    int passwordColumn = cur.getColumnIndex(UserColumns.PASSWORD);
             List<Map<String,String>> userList = new ArrayList<>();
             Map<String,String> user = new HashMap<>();
             do {
                 email = cur.getString(emailColumn);
                 name = cur.getString(nameColumn);
-          //      password_encode = cur.getString(passwordColumn);
-          //      String password = new String(Base64.decode(password_encode,Base64.DEFAULT));
+        //        password_encode = cur.getString(passwordColumn);
+        //        String password = new String(Base64.decode(password_encode,Base64.DEFAULT));
                 user.put(UserColumns.NAME,name);
                 user.put(UserColumns.EMAIL,email);
-          //      user.put("password",password);
-          //      Log.v("LogSample", password);
+        //        user.put("password",password);
+        //        Log.v("LogSample", password);
                 userList.add(user);
+                user = new HashMap<>();
             }while (cur.moveToNext());
             SimpleAdapter adapter = new SimpleAdapter(this, userList, android.R.layout.simple_list_item_2, new String[]{
                     UserColumns.NAME, UserColumns.EMAIL}, new int[]{
